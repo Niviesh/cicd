@@ -5,31 +5,31 @@ pipeline {
 
         stage('Checkout SCM') {
             steps {
-                echo 'Checking out code'
+                git 'https://github.com/Niviesh/cicd.git'
             }
         }
 
-        stage('Build') {
+        stage('Build Maven') {
             steps {
-                echo 'Building application'
+                sh 'mvn clean package'
             }
         }
 
         stage('Docker Build') {
             steps {
-                echo 'Building Docker image'
+                sh 'docker build -t niviesh/cicd:latest .'
             }
         }
 
         stage('Docker Push') {
             steps {
-                echo 'Pushing Docker image'
+                sh 'docker push niviesh/cicd:latest'
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying application'
+                sh 'kubectl apply -f deployment.yaml'
             }
         }
     }
