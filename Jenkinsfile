@@ -26,9 +26,10 @@ pipeline {
         }
 
         stage('Deploy') {
+            environment {
+                KUBECONFIG = '/var/lib/jenkins/.kube/config'
+            }
             steps {
                 sh 'kubectl apply -f deployment.yaml'
             }
         }
-    }
-}
