@@ -2,12 +2,7 @@ pipeline {
     agent any
 
     stages {
-
-        stage('Checkout SCM') {
-            steps {
-                git 'https://github.com/Niviesh/cicd.git'
-            }
-        }
+        // Jenkins automatically handles the 'Checkout SCM' step right here behind the scenes.
 
         stage('Build Maven') {
             steps {
@@ -23,7 +18,10 @@ pipeline {
 
         stage('Docker Push') {
             steps {
-                sh 'docker push niviesh/cicd:latest'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    sh 'docker push niviesh/cicd:latest'
+                }
             }
         }
 
