@@ -2,8 +2,6 @@ pipeline {
     agent any
 
     stages {
-        // Jenkins automatically handles the 'Checkout SCM' step right here behind the scenes.
-
         stage('Build Maven') {
             steps {
                 sh 'mvn clean package'
@@ -33,3 +31,5 @@ pipeline {
                 sh 'kubectl apply -f deployment.yaml'
             }
         }
+    }
+}
