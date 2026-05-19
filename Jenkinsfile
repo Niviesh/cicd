@@ -10,15 +10,15 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t niviesh/cicd:latest .'
+                sh 'docker build -t docker.io/niviesh/cicd:latest .'
             }
         }
 
         stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh "docker login -u \$DOCKER_USERNAME -p \$DOCKER_PASSWORD"
-                    sh "docker push niviesh/cicd:latest"
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                    sh "docker push docker.io/niviesh/cicd:latest"
                 }
             }
         }
