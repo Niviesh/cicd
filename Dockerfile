@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM eclipse-temurin:17-jre-alpine
 ARG artifact=target/demo-app-1.0.jar
 WORKDIR /opt/app
 COPY ${artifact} app.jar
