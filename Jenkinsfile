@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        git branch: 'main', url: 'https://github.com/Niviesh/cicd
+        git branch: 'main', url: 'https://github.com/Niviesh/cicd'
       }
     }
     stage('Build and Test') {
