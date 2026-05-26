@@ -1,8 +1,9 @@
 pipeline {
+
     agent {
         docker {
-            image 'abhishekf5/maven-abhishek-docker-agent:v1'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+            image 'maven:3.9.6-eclipse-temurin-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -20,13 +21,11 @@ pipeline {
             }
         }
 
-        stage('Verify Environment') {
+        stage('Verify Java & Maven') {
             steps {
                 sh 'java -version'
+                sh 'javac -version'
                 sh 'mvn -version'
-                sh 'docker --version'
-                sh 'pwd'
-                sh 'ls -la'
             }
         }
 
@@ -38,6 +37,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
+
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
 
                     sh '''
@@ -71,7 +71,7 @@ pipeline {
             }
         }
 
-        stage('Update Kubernetes Manifest') {
+        stage('Update Kubernetes Deployment') {
 
             steps {
 
@@ -81,9 +81,9 @@ pipeline {
                         git config user.email "niviesh11@gmail.com"
                         git config user.name "Niviesh"
 
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" deployment.yml
+                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" deployment.yaml
 
-                        git add deployment.yml
+                        git add deployment.yaml
 
                         git commit -m "Updated image tag ${BUILD_NUMBER}" || echo "No changes to commit"
 
@@ -97,7 +97,7 @@ pipeline {
     post {
 
         success {
-            echo 'CI/CD Pipeline executed successfully!'
+            echo 'Pipeline executed successfully!'
         }
 
         failure {
