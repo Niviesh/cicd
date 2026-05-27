@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "niviesh/demo-app:${BUILD_NUMBER}"
-        SONAR_URL = "http://18.145.206.63:9000"
+        SONAR_URL = "http://13.56.165.135:9000"
     }
 
     stages {
